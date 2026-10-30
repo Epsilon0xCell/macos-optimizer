@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>macos-optimizer</title>
+<!-- pages-campaign site for Epsilon0xCell/macos-optimizer; source of truth: macos-optimizer-Website/ on the default branch -->
+<style>
+/* I built this page as a ledger because credit is the whole story of this repo. Left column is what came from upstream, right column is what I changed. If the two columns ever blur, the page has failed at its one job. */
+*{box-sizing:border-box}
+body{margin:0;background:#eef2e9;color:#1d2a1d;font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.6;font-size:15px}
+.wrap{max-width:980px;margin:0 auto;padding:44px 26px 72px}
+img.banner{width:100%;height:auto;display:block;border:2px solid #1d2a1d}
+.head{display:flex;gap:20px;align-items:flex-start;margin:28px 0 6px}
+.head img{width:64px;height:64px;border:2px solid #1d2a1d}
+h1{font-family:Georgia,serif;font-size:44px;margin:0;line-height:1.05}
+.lede{font-family:Georgia,serif;font-size:19px;max-width:660px}
+.badges{margin:18px 0}
+.badges img{margin:0 6px 6px 0}
+h2{font-family:Georgia,serif;font-size:24px;border-bottom:2px solid #1d2a1d;padding-bottom:6px;margin:44px 0 16px}
+.ledger{display:grid;grid-template-columns:1fr 1fr;border:2px solid #1d2a1d;background:#f7f9f3}
+@media(max-width:720px){.ledger{grid-template-columns:1fr}h1{font-size:32px}}
+.col{padding:22px}
+.col:first-child{border-right:2px solid #1d2a1d;background:#e6ecdd}
+.col h3{margin:0 0 6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.col .who{font-family:Georgia,serif;font-size:22px;margin:0 0 14px}
+.col ul{margin:0;padding-left:18px}
+.col li{margin-bottom:10px}
+table{width:100%;border-collapse:collapse;background:#f7f9f3}
+td,th{border:1px solid #7a8a72;padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2a1d;color:#f7f9f3;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.chips span{display:inline-block;border:1px solid #1d2a1d;padding:3px 9px;margin:0 5px 7px 0;font-size:13px;background:#f7f9f3}
+a{color:#1d2a1d}
+.note{border:2px solid #1d2a1d;background:#fff8dd;padding:16px 18px}
+footer{margin-top:48px;border-top:2px solid #1d2a1d;padding-top:14px;font-size:13px;color:#3d4d3d}
+</style>
+</head>
+<body>
+<div class="wrap">
+<img class="banner" src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/banner.png" alt="macos-optimizer banner">
+<div class="head">
+<img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/logo.png" alt="macos-optimizer logo">
+<div><h1>macos-optimizer</h1><p class="lede">A menu driven macOS script in <code>script.sh</code>, adapted from an upstream project, with my own changes kept and credited.</p></div>
+</div>
+<div class="badges">
+<img src="https://img.shields.io/github/stars/Epsilon0xCell/macos-optimizer" alt="Stars">
+<img src="https://img.shields.io/github/forks/Epsilon0xCell/macos-optimizer" alt="Forks">
+<img src="https://img.shields.io/github/last-commit/Epsilon0xCell/macos-optimizer" alt="Last commit">
+<img src="https://img.shields.io/github/languages/top/Epsilon0xCell/macos-optimizer" alt="Top language">
+<img src="https://img.shields.io/github/repo-size/Epsilon0xCell/macos-optimizer" alt="Repo size">
+<img src="https://img.shields.io/github/license/Epsilon0xCell/macos-optimizer" alt="License">
+</div>
+
+<h2>What this is</h2>
+<p>I did not write this script from a blank file, and this page will not pretend I did. <code>script.sh</code> carries a copyright line for Sami Halawa at the top, and my README credits the original project at <a href="https://github.com/samihalawa/macos-optimizer">github.com/samihalawa/macos-optimizer</a>. What sits in my repo is that script, adapted, with a short list of changes that are mine.</p>
+<p>The script itself is a numbered menu for a Mac. On start it prints system information, hostname, macOS version, kernel, CPU, memory, and storage, then it loops through 25 choices plus quit. Pick a number and that action runs at once. The ledger below is the honest split of who did what.</p>
+<p>My reason for keeping a copy at all is the Gatekeeper change. The original turned Gatekeeper off as an optimization. I removed that line and made the same slot turn Gatekeeper on. That one decision is the reason this repo exists, and I would rather have a small claim that is true than a large one that is not.</p>
+
+<h2>The ledger</h2>
+<div class="ledger">
+<div class="col">
+<h3>Credit: upstream</h3>
+<p class="who">Sami Halawa</p>
+<ul>
+<li>The original macos-optimizer project, linked above and credited in my README.</li>
+<li>The <code>script.sh</code> base: its menu, its functions, its color palette, and its structure. Line 2 of the file reads Copyright (c) 2024 Sami Halawa.</li>
+<li>The bulk of the 25 menu actions as written upstream, from Spotlight and sleep settings to DNS flush and network tuning.</li>
+<li>The LICENSE file sits in this repo with the script. Any reuse should follow that file and the upstream credit, not this page.</li>
+</ul>
+</div>
+<div class="col">
+<h3>Credit: mine</h3>
+<p class="who">Epsilon0xCell, this repo</p>
+<ul>
+<li>The Gatekeeper reversal. Menu option 23 runs <code>spctl --master-enable</code> here. Upstream ran <code>spctl --master-disable</code> in that place. My README keeps a quote of the removed line so the change can be checked.</li>
+<li>Two fixes to a broken DS_Store line. Option 18 and the run all path appended <code>find. -name</code> to <code>~/.profile</code>, and <code>find.</code> is not a command. Both now read <code>find . -name</code>.</li>
+<li>The safe set label fix. Option 24 now lists 1, 3, 4, 5, 7, 11, 12, 16, which is what <code>run_safe</code> actually runs. The old label listed TRIM, which the safe set never runs.</li>
+<li>A missing color. The line that prints the upstream address used a MAGENTA variable that was never defined. It is defined now with the rest of the palette.</li>
+<li>The README work in this repo: the credit kept at the top, the menu written out in full, the fixes recorded, and the limits below stated in plain words.</li>
+</ul>
+</div>
+</div>
+
+<h2>What the menu holds</h2>
+<!-- I listed the menu in a table instead of prose because a reader checking my ledger claim needs to count the entries and see that the safe set adds up. -->
+<table>
+<tr><th>Group</th><th>Entries from the README</th></tr>
+<tr><td>System switches</td><td>1 Spotlight off, 2 sleep image off, 3 App Nap off, 4 automatic termination off, 9 sudden motion sensor off, 10 hibernation and sleep off, 13 Dashboard off, 14 animations off, 21 Bluetooth off</td></tr>
+<tr><td>Checks and caches</td><td>5 <code>fsck -fy</code>, 11 flush DNS cache, 12 rebuild Spotlight index, 15 local Time Machine snapshots off, 16 Secure Empty Trash on, 17 clear font caches, 18 DS_Store removal line for <code>~/.profile</code></td></tr>
+<tr><td>Power and tuning</td><td>6 and 22 TRIM, 7 lid wake on, 8 swap tuning, 19 network settings, 20 system performance settings</td></tr>
+<tr><td>Sets and safety</td><td>23 Gatekeeper on, 24 safe set only (1, 3, 4, 5, 7, 11, 12, 16), 25 run all except TRIM, 0 quit</td></tr>
+</table>
+<p style="margin-top:18px">After each action the script reports success or error and waits for Enter, or q to return to the menu. TRIM is the one item that asks for confirmation first and expects a restart, which is why it stays out of the safe set.</p>
+<p class="chips"><span>Bash</span><span>script.sh</span><span>macOS only</span><span>sw_vers</span><span>pmset</span><span>mdutil</span><span>spctl</span></p>
+
+<h2>Honest notes</h2>
+<div class="note">
+<p style="margin-top:0">The script intro says no changes are made without explicit confirmation. That is not true for menu choices. Picking a number applies the change at once, and only TRIM asks first. I left that wording as written and recorded the mismatch in the README instead of rebuilding confirmations for all 25 options.</p>
+<p style="margin-bottom:0">I checked this script with <code>bash -n</code> only. I did not run it live. It changes real system settings on a Mac, and this work was done on a Linux host, so a live run was out of the question in any case.</p>
+</div>
+
+<p style="margin-top:28px"><a href="https://github.com/Epsilon0xCell/macos-optimizer">This repo, with the credit in its README</a> &nbsp; <a href="https://github.com/samihalawa/macos-optimizer">The upstream project</a> &nbsp; <a href="https://github.com/Epsilon0xCell">My GitHub profile</a></p>
+<footer>Built by Epsilon0xCell. Ledger closed: upstream wrote the script, I changed the parts listed on the right, and nothing on the left is claimed as mine.</footer>
+</div>
+</body>
+</html>
