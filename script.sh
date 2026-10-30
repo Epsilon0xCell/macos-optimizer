@@ -12,6 +12,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 YELLOW='\033[0;33m'
 PURPLE='\033[0;35m'
+MAGENTA='\033[1;35m'
 GRAY='\033[1;30m'
 NC='\033[0m' # No Color
 
@@ -117,7 +118,7 @@ function run_all() {
     sudo atsutil databases -remove
     check_status "Font caches cleared"
     echo "Adding command to remove.DS_Store files from new folders"
-    echo "find. -name '.DS_Store' -depth -exec rm {} \;" >> ~/.profile
+    echo "find . -name '.DS_Store' -depth -exec rm {} \;" >> ~/.profile
     source ~/.profile
     check_status "Command added to remove.DS_Store files"
     echo -e "${GREEN}All optimizations complete!${NC}"
@@ -246,7 +247,7 @@ while true; do
     echo -e "${GRAY}21.${NC} ${YELLOW}Disable Bluetooth when not in use${NC} - ${GREEN}Saves battery life and reduces power consumption${NC} | ${RED}No significant downside${NC}"
     echo -e "${GRAY}22.${NC} ${YELLOW}Enable TRIM${NC} - ${GREEN}Improves SSD lifespan and performance${NC} | ${RED}System will restart after enabling${NC}"
     echo -e "${GRAY}23.${NC} ${YELLOW}Enable Gatekeeper${NC} - ${GREEN}Increases security by allowing only trusted apps${NC} | ${RED}May restrict some app installations${NC}"
-    echo -e "${PURPLE}24.${NC} ${CYAN}RUN ONLY SAFE OPTIMIZATIONS (1,3,4,5,6,7,11,12,16)${NC} - ${GREEN}Balanced tuning${NC} | ${RED}May take a few seconds longer${NC}"
+    echo -e "${PURPLE}24.${NC} ${CYAN}RUN ONLY SAFE OPTIMIZATIONS (1,3,4,5,7,11,12,16)${NC} - ${GREEN}Balanced tuning${NC} | ${RED}May take a few seconds longer${NC}"
     echo -e "${PURPLE}25.${NC} ${CYAN}RUN ALL OPTIMIZATIONS (except TRIM as requires restart)${NC} - ${GREEN}Comprehensive tuning${NC} | ${RED}May take a few seconds longer${NC}"
     echo -e "${RED}0.${NC} ${RED}Quit${NC}"
 
@@ -332,7 +333,7 @@ while true; do
             ;;
         18)
             echo "Adding command to remove.DS_Store files from new folders"
-            echo "find. -name '.DS_Store' -depth -exec rm {} \;" >> ~/.profile
+            echo "find . -name '.DS_Store' -depth -exec rm {} \;" >> ~/.profile
             source ~/.profile
             check_status "Command added to remove.DS_Store files"
             ;;
