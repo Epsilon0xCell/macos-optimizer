@@ -125,6 +125,12 @@ function run_all() {
 }
 
 function run_safe() {
+    # This set is exactly the eight actions below, and the menu label
+    # for option 24 has to stay in step with it (a previous label listed
+    # TRIM, which this function has never run). TRIM stays out on
+    # purpose: trimforce asks its own confirmation question and expects
+    # a restart, so it cannot be one step inside a set that runs from a
+    # single menu choice.
     echo "Running safe optimizations..."
     loading
     sudo mdutil -a -i off
@@ -161,6 +167,12 @@ function enable_TRIM() {
 }
 
 function enable_gatekeeper() {
+    # This is where this version deliberately parts from the upstream
+    # script it adapts (see the copyright at the top of this file and
+    # the credit in the README): the original disabled Gatekeeper with
+    # spctl --master-disable as part of "optimization". Turning off the
+    # check that stops unsigned software is not an optimization, so here
+    # the same menu slot enables it instead.
     echo "Enabling Gatekeeper..."
     sudo spctl --master-enable
     check_status "Gatekeeper enabled"
