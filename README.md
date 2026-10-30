@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # macos-optimizer
 Credit To: 
 ```
