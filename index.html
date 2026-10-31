@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>macos-optimizer: The Control Panel</title>
+<meta name="description" content="A control panel reading of script.sh: twenty five switches on one board, and the one switch this fork flips the other way.">
+<!-- pages-campaign site for Epsilon0xCell/macos-optimizer; source of truth: macos-optimizer-Website/ on the default branch -->
+<style>
+/* I built this page as a machine room control panel because that is what script.sh is: one board, twenty five numbered switches, each one wired to a real system setting. I kept the panel dark, the rows labelled, and the one reversed switch impossible to miss. */
+:root{--panel:#12161a;--panel2:#171d22;--edge:#2e383f;--ink:#e8ecee;--muted:#9fb0b8;--amber:#e8b13c;--magenta:#e04fd0;--green:#4ec97a;--red:#e05a4f;--paper:#0b0e10}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;line-height:1.6;font-size:15px}
+a{color:var(--amber)}
+img{max-width:100%}
+.topbar{border-bottom:1px solid var(--edge);padding:10px 20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.layout{max-width:1180px;margin:0 auto;padding:28px 20px 70px}
+.banner{width:100%;height:auto;display:block;border:1px solid var(--edge)}
+.hero{display:grid;grid-template-columns:72px 1fr;gap:20px;align-items:start;margin:30px 0 8px;text-align:left}
+.hero img{width:72px;height:72px;border:1px solid var(--edge);background:#fff}
+h1{font-size:38px;line-height:1.1;margin:0 0 10px;font-weight:700}
+h1 span{color:var(--amber)}
+.lede{color:var(--muted);max-width:760px;margin:0}
+.badges{margin:18px 0 6px;display:flex;flex-wrap:wrap;gap:6px}
+.badges img{height:20px}
+.meta{font-size:13px;color:var(--muted)}
+h2{font-size:22px;margin:52px 0 8px;border-left:6px solid var(--amber);padding-left:12px;line-height:1.25}
+h2.mag{border-color:var(--magenta)}
+.sub{color:var(--muted);max-width:820px}
+.panel{background:var(--panel);border:1px solid var(--edge);padding:18px;margin-top:20px}
+.panel-head{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;border-bottom:1px solid var(--edge);padding-bottom:14px;margin-bottom:6px}
+.panel-head strong{letter-spacing:.1em;text-transform:uppercase;font-size:13px}
+.illus{border:1px solid var(--amber);color:#f3d98b;padding:10px 12px;font-size:13px;max-width:560px}
+.group{border-bottom:1px solid var(--edge);padding:14px 0 6px}
+.group:last-child{border-bottom:0}
+.group-head{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:baseline}
+.group-head h3{margin:4px 0;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+.group-head p{margin:4px 0;color:var(--muted);font-size:13px}
+.switch-row{display:grid;grid-template-columns:44px 1fr 64px;gap:14px;align-items:center;padding:10px 8px;border-top:1px solid #20282e;transition:background .18s ease,transform .18s ease}
+.switch-row:hover{background:var(--panel2);transform:translateX(4px)}
+.switch-row .num{font-size:20px;color:var(--muted);text-align:right}
+.row-label{display:block;font-weight:700}
+.row-runs{display:block;color:var(--muted);font-size:12.5px;word-break:break-word}
+.switch-row.flipped{background:#1d1420;border:1px solid var(--magenta)}
+.switch-row.flipped .num{color:var(--magenta)}
+.gate-note{color:#f0b8e8;font-size:13px;margin:6px 0 0}
+.subs{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.subs-label{font-size:12px;color:var(--muted)}
+span.sub{display:inline-block;border:1px solid var(--edge);padding:2px 8px;font-size:12px;color:var(--ink);background:#0e1215}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .track{display:block;width:56px;height:28px;border:1px solid var(--muted);border-radius:999px;position:relative;background:#0a0d0f;cursor:pointer}
+.switch .knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .18s ease,background .18s ease}
+.switch input:checked + .track .knob{transform:translateX(28px);background:var(--green)}
+.switch-row.flipped .knob{background:var(--magenta)}
+.switch input:focus-visible + .track{outline:2px solid var(--amber);outline-offset:3px}
+.quit{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:12px 8px;color:var(--red)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:800px){.cols{grid-template-columns:1fr}h1{font-size:29px}.hero{grid-template-columns:52px 1fr}.hero img{width:52px;height:52px}}
+.card{border:1px solid var(--edge);background:var(--panel);padding:18px}
+.card h3{margin:0 0 8px;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+figure{margin:0 0 22px;border:1px solid var(--edge);background:var(--panel);padding:12px}
+figure img{width:100%;height:auto;display:block;background:#fff}
+figcaption{color:var(--muted);font-size:13px;padding-top:10px}
+figcaption strong{color:var(--ink)}
+pre{background:#080a0b;border:1px solid var(--edge);padding:14px;overflow-x:auto;font-size:12.5px;line-height:1.55}
+pre code{white-space:pre}
+.cap-label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin:18px 0 6px}
+.note{border:1px solid var(--red);background:#1c1212;padding:16px 18px}
+.note p{margin:0 0 10px}.note p:last-child{margin:0}
+.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.js .reveal.in{opacity:1;transform:none}
+footer{margin-top:56px;border-top:1px solid var(--edge);padding-top:16px;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.switch-row,.switch .knob,.js .reveal{transition:none}.js .reveal{opacity:1;transform:none}.switch-row:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="topbar"><span>Panel 01 / script.sh</span><span>macOS only / Bash / GPL-3.0</span><span>25 switches + quit</span></div>
+<div class="layout">
+<img class="banner" src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/banner.png" alt="macos-optimizer banner">
+<div class="hero">
+<img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/logo.png" alt="macos-optimizer logo">
+<div>
+<h1>macos-optimizer: <span>The Control Panel</span></h1>
+<p class="lede">I keep a menu driven macOS script in <code>script.sh</code>. On start it prints system information, hostname, macOS version, kernel, CPU, memory, and storage, then it loops a numbered menu. Twenty five switches sit on one board. I built this page as that board.</p>
+</div>
+</div>
+<div class="badges">
+<img src="https://img.shields.io/github/stars/Epsilon0xCell/macos-optimizer" alt="Stars">
+<img src="https://img.shields.io/github/forks/Epsilon0xCell/macos-optimizer" alt="Forks">
+<img src="https://img.shields.io/github/last-commit/Epsilon0xCell/macos-optimizer" alt="Last commit">
+<img src="https://img.shields.io/github/languages/top/Epsilon0xCell/macos-optimizer" alt="Top language">
+<img src="https://img.shields.io/github/repo-size/Epsilon0xCell/macos-optimizer" alt="Repo size">
+<img src="https://img.shields.io/github/license/Epsilon0xCell/macos-optimizer" alt="License GPL-3.0">
+</div>
+<p class="meta">License: GPL-3.0, held in the LICENSE file in the repo. Script: <code>script.sh</code>, 383 lines at the head this page was built from. Upstream: adapted from Sami Halawa, <a href="https://github.com/samihalawa/macos-optimizer">github.com/samihalawa/macos-optimizer</a>.</p>
+
+<h2>The board</h2>
+<p class="sub">I grouped the rows by what they touch. Each row gives the menu number, the label I use for it, and the command or function the script runs for that number. Read the yellow box before you touch a switch.</p>
+<div class="panel">
+<div class="panel-head"><strong>The switch board</strong><p class="illus">Illustration only: flipping a switch on this page changes nothing on any machine. These switches illustrate the menu in <code>script.sh</code>. They are not a live control, they send nothing, and they run nothing.</p></div>
+<section class="group reveal"><div class="group-head"><h3>01 / Indexing and sleep</h3><p>What the machine looks up, and how it rests.</p></div>
+<div class="switch-row">
+  <span class="num">1</span>
+  <div class="row-main"><span class="row-label">Disable Spotlight indexing</span><code class="row-runs">sudo mdutil -a -i off</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 1"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">2</span>
+  <div class="row-main"><span class="row-label">Disable sleep image</span><code class="row-runs">sudo pmset -a hibernatemode 0</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 2"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">3</span>
+  <div class="row-main"><span class="row-label">Disable App Nap</span><code class="row-runs">defaults write NSGlobalDomain NSAppSleepDisabled -bool YES</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 3"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">4</span>
+  <div class="row-main"><span class="row-label">Disable automatic termination</span><code class="row-runs">defaults write NSGlobalDomain NSDisableAutomaticTermination -bool YES</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 4"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">7</span>
+  <div class="row-main"><span class="row-label">Enable lid wake</span><code class="row-runs">sudo pmset -a lidwake 1</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 7"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">8</span>
+  <div class="row-main"><span class="row-label">Optimise swap</span><code class="row-runs">sudo sysctl vm.swappiness=10</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 8"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">9</span>
+  <div class="row-main"><span class="row-label">Disable sudden motion sensor</span><code class="row-runs">sudo pmset -a sms 0</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 9"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">10</span>
+  <div class="row-main"><span class="row-label">Disable hibernation and sleep</span><code class="row-runs">sudo pmset -a hibernatemode 0, then sudo pmset -a sleep 0</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 10"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">12</span>
+  <div class="row-main"><span class="row-label">Rebuild Spotlight index</span><code class="row-runs">sudo mdutil -E /</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 12"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+</section>
+<section class="group reveal"><div class="group-head"><h3>02 / Caches, checks and cleanup</h3><p>What gets flushed, checked, or cleared out.</p></div>
+<div class="switch-row">
+  <span class="num">5</span>
+  <div class="row-main"><span class="row-label">Run fsck -fy</span><code class="row-runs">sudo fsck -fy</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 5"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">11</span>
+  <div class="row-main"><span class="row-label">Flush DNS cache</span><code class="row-runs">sudo dscacheutil -flushcache</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 11"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">15</span>
+  <div class="row-main"><span class="row-label">Disable local Time Machine snapshots</span><code class="row-runs">sudo tmutil disablelocal</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 15"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">16</span>
+  <div class="row-main"><span class="row-label">Enable Secure Empty Trash</span><code class="row-runs">defaults write com.apple.finder EmptyTrashSecurely -bool true</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 16"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">17</span>
+  <div class="row-main"><span class="row-label">Clear font caches</span><code class="row-runs">sudo atsutil databases -remove</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 17"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">18</span>
+  <div class="row-main"><span class="row-label">Append a .DS_Store removal command to ~/.profile</span><code class="row-runs">echo &quot;find . -name &#x27;.DS_Store&#x27; ...&quot; &gt;&gt; ~/.profile</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 18"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+</section>
+<section class="group reveal"><div class="group-head"><h3>03 / Network and performance</h3><p>How the interface moves, and how the system answers.</p></div>
+<div class="switch-row">
+  <span class="num">13</span>
+  <div class="row-main"><span class="row-label">Disable Dashboard</span><code class="row-runs">defaults write com.apple.dashboard mcx-disabled -boolean YES, then killall Dock</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 13"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">14</span>
+  <div class="row-main"><span class="row-label">Disable animations</span><code class="row-runs">Three defaults writes covering window, QuickLook panel, and Finder animations</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 14"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">19</span>
+  <div class="row-main"><span class="row-label">Optimise network settings</span><code class="row-runs">optimize_network_settings: sudo sysctl -w net.inet.tcp.delayed_ack=0 and net.inet.tcp.mssdflt=1440</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 19"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">20</span>
+  <div class="row-main"><span class="row-label">Optimise system performance</span><code class="row-runs">optimize_system_performance: sudo sysctl -w kern.ipc.somaxconn=1024 and kern.ipc.nmbclusters=32768</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 20"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">21</span>
+  <div class="row-main"><span class="row-label">Disable Bluetooth</span><code class="row-runs">sudo defaults write /Library/Preferences/com.apple.Bluetooth.plist ControllerPowerState -int 0</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 21"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+</section>
+<section class="group reveal"><div class="group-head"><h3>04 / Security and the sets</h3><p>The switches I argue about, and the rows that run other rows.</p></div>
+<div class="switch-row">
+  <span class="num">6</span>
+  <div class="row-main"><span class="row-label">Enable TRIM</span><code class="row-runs">Asks for confirmation first, then sudo trimforce enable. Needs a restart.</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 6"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">22</span>
+  <div class="row-main"><span class="row-label">Enable TRIM</span><code class="row-runs">enable_TRIM: sudo trimforce enable</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 22"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row flipped">
+  <span class="num">23</span>
+  <div class="row-main"><span class="row-label">Enable Gatekeeper</span><code class="row-runs">sudo spctl --master-enable</code><p class="gate-note">I flipped this one the other way on purpose. Upstream disabled Gatekeeper. I enable it. The full story sits in the Gatekeeper section below.</p></div>
+  <label class="switch" aria-label="Illustrated switch for option 23"><input type="checkbox" class="flip" checked><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">24</span>
+  <div class="row-main"><span class="row-label">Run only the safe set</span><code class="row-runs">run_safe: 1, 3, 4, 5, 7, 11, 12, 16</code><div class="subs"><span class="subs-label">My safe set, as sub-switches:</span><span class="sub">Switch 1</span><span class="sub">Switch 3</span><span class="sub">Switch 4</span><span class="sub">Switch 5</span><span class="sub">Switch 7</span><span class="sub">Switch 11</span><span class="sub">Switch 12</span><span class="sub">Switch 16</span></div></div>
+  <label class="switch" aria-label="Illustrated switch for option 24"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+<div class="switch-row">
+  <span class="num">25</span>
+  <div class="row-main"><span class="row-label">Run all optimisations except TRIM</span><code class="row-runs">run_all: the full board in one pass, without TRIM</code></div>
+  <label class="switch" aria-label="Illustrated switch for option 25"><input type="checkbox" class="flip"><span class="track"><span class="knob"></span></span></label>
+</div>
+</section>
+<div class="quit"><span class="num">0</span><div><span class="row-label">Quit</span><code class="row-runs">exit 0, after printing: Quitting the script. Bye!</code></div></div>
+</div>
+<p class="sub">After each action in the real script, the script reports success or error and waits for Enter, or q to return to the menu. In this page, the rows only light up. That difference is the point of the label above.</p>
+
+<h2 class="mag">The one switch I flipped the other way</h2>
+<div class="cols">
+<div class="card">
+<h3>Upstream, then mine</h3>
+<p>I did not write this script from a blank file. It is adapted from Sami Halawa's macOS optimizer, and the copyright at the top of <code>script.sh</code> still names Sami Halawa. My changes sit on top of that base, and I list them as a delta, not as the whole work.</p>
+<p>The headline change is Gatekeeper. The original disabled Gatekeeper with <code>sudo spctl --master-disable</code>. I removed that line. In my version, option 23 runs <code>sudo spctl --master-enable</code>. I do not count turning off the check that stops unsigned software as an optimisation, so I wired the same slot in the opposite direction. That is why switch 23 sits flipped on the board above, in magenta, against the rest.</p>
+<p>Full upstream credit: Sami Halawa, <a href="https://github.com/samihalawa/macos-optimizer">github.com/samihalawa/macos-optimizer</a>. If you reuse the script, follow the LICENSE file in the repo and keep that credit.</p>
+</div>
+<div class="card">
+<h3>My delta, in full</h3>
+<ul>
+<li>Gatekeeper: option 23 enables Gatekeeper instead of disabling it. See the capture below, lines 169 to 181.</li>
+<li>The <code>find.</code> fix: option 18 and the matching step in run_all appended <code>find. -name '.DS_Store'</code> to <code>~/.profile</code>. <code>find.</code> is not a command, so that line could never work. Both places now append <code>find . -name '.DS_Store'</code>, with a space before the dot.</li>
+<li>The option 24 label: the menu now lists 1, 3, 4, 5, 7, 11, 12, 16, which is the set <code>run_safe</code> actually runs. An earlier label listed TRIM, and <code>run_safe</code> has never run TRIM.</li>
+<li>MAGENTA: the intro line that prints the project address used a MAGENTA colour variable that was never defined, so the address printed without colour. I defined MAGENTA at line 15, alongside the other colours.</li>
+</ul>
+</div>
+</div>
+
+<p class="cap-label">Capture: colour definitions, script.sh lines 8 to 17, MAGENTA at line 15</p>
+<pre><code data-cap="colour"># Professional Color Palette
+GREEN=&#x27;\033[1;32m&#x27;
+RED=&#x27;\033[0;31m&#x27;
+BLUE=&#x27;\033[0;34m&#x27;
+CYAN=&#x27;\033[0;36m&#x27;
+YELLOW=&#x27;\033[0;33m&#x27;
+PURPLE=&#x27;\033[0;35m&#x27;
+MAGENTA=&#x27;\033[1;35m&#x27;
+GRAY=&#x27;\033[1;30m&#x27;
+NC=&#x27;\033[0m&#x27; # No Color</code></pre>
+<p class="cap-label">Capture: Gatekeeper block, script.sh lines 169 to 181</p>
+<pre><code data-cap="gate">function enable_gatekeeper() {
+    # I changed this slot from the upstream version on purpose (see
+    # the copyright at the top of this file and the credit in the
+    # README): the original disabled Gatekeeper with
+    # spctl --master-disable and called that an optimization. I do
+    # not treat turning off the check that stops unsigned software
+    # as an optimization, so in my version the same slot enables it.
+    # I keep this note here so nobody restores the upstream line
+    # thinking my change was a mistake.
+    echo &quot;Enabling Gatekeeper...&quot;
+    sudo spctl --master-enable
+    check_status &quot;Gatekeeper enabled&quot;
+}</code></pre>
+<p class="sub">I left my own comment in that block, lines 170 to 177, so nobody restores the upstream disable line thinking my enable line was a mistake.</p>
+
+<h2>Option 24, the master row</h2>
+<p class="sub">Option 24 is the panel master row. It calls <code>run_safe</code>, and <code>run_safe</code> runs exactly eight actions: 1, 3, 4, 5, 7, 11, 12, 16. On the board above I showed those eight as sub-switches under row 24, because that is how the function is wired. TRIM stays out on purpose: trimforce asks its own confirmation and expects a restart, so I cannot fold it into a set that runs from a single menu choice.</p>
+<p class="cap-label">Capture: run_safe, script.sh lines 127 to 153</p>
+<pre><code data-cap="safe">function run_safe() {
+    # I keep this set to exactly the eight actions below, and I keep
+    # the menu label for option 24 in step with it, because a previous
+    # label listed TRIM and this function has never run TRIM. I leave
+    # TRIM out on purpose: trimforce asks its own confirmation and
+    # expects a restart, so I cannot fold it into a set that runs
+    # from a single menu choice.
+    echo &quot;Running safe optimizations...&quot;
+    loading
+    sudo mdutil -a -i off
+    check_status &quot;Spotlight indexing disabled&quot;
+    defaults write NSGlobalDomain NSAppSleepDisabled -bool YES
+    check_status &quot;App Nap disabled&quot;
+    defaults write NSGlobalDomain NSDisableAutomaticTermination -bool YES
+    check_status &quot;Automatic termination of inactive apps disabled&quot;
+    sudo fsck -fy
+    check_status &quot;Continuous disk checking enabled&quot;
+    sudo pmset -a lidwake 1
+    check_status &quot;Lid wake enabled&quot;
+    sudo dscacheutil -flushcache
+    check_status &quot;DNS cache flushed&quot;
+    sudo mdutil -E /
+    check_status &quot;Spotlight optimized for faster searches&quot;
+    defaults write com.apple.finder EmptyTrashSecurely -bool true
+    check_status &quot;Secure Empty Trash enabled&quot;
+    echo -e &quot;${GREEN}Safe optimizations complete!${NC}&quot;
+}</code></pre>
+<p class="cap-label">Capture: menu lines for options 23, 24, 25 and 0, script.sh lines 263 to 266</p>
+<pre><code data-cap="menu">    echo -e &quot;${GRAY}23.${NC} ${YELLOW}Enable Gatekeeper${NC} - ${GREEN}Increases security by allowing only trusted apps${NC} | ${RED}May restrict some app installations${NC}&quot;
+    echo -e &quot;${PURPLE}24.${NC} ${CYAN}RUN ONLY SAFE OPTIMIZATIONS (1,3,4,5,7,11,12,16)${NC} - ${GREEN}Balanced tuning${NC} | ${RED}May take a few seconds longer${NC}&quot;
+    echo -e &quot;${PURPLE}25.${NC} ${CYAN}RUN ALL OPTIMIZATIONS (except TRIM as requires restart)${NC} - ${GREEN}Comprehensive tuning${NC} | ${RED}May take a few seconds longer${NC}&quot;
+    echo -e &quot;${RED}0.${NC} ${RED}Quit${NC}&quot;</code></pre>
+
+<h2>Small fixes, shown at the wire</h2>
+<p class="sub">The <code>find.</code> story is a one character fault with a long tail. The broken text was written into <code>~/.profile</code>, so it would have failed every time a new shell read that file, not just once in the menu. I fixed both write sites: line 121 in run_all and line 350 in the option 18 case. The capture below is the option 18 site.</p>
+<p class="cap-label">Capture: corrected find . line, option 18 case, script.sh lines 348 to 352</p>
+<pre><code data-cap="find">        18)
+            echo &quot;Adding command to remove.DS_Store files from new folders&quot;
+            echo &quot;find . -name &#x27;.DS_Store&#x27; -depth -exec rm {} \;&quot; &gt;&gt; ~/.profile
+            source ~/.profile
+            check_status &quot;Command added to remove.DS_Store files&quot;</code></pre>
+
+<h2>The sheets</h2>
+<p class="sub">I drew the repo as notebook sheets. VISUAL.md in the Visuals folder describes five sheets: architecture, flowchart, product map, data flow, and statistics. The folder itself holds six PNG sheets, because schematic.png sits there as a sixth sheet that VISUAL.md does not list. I show all six below and I note the count difference here, rather than quietly dropping the extra sheet.</p>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/macos-optimizer-Visuals/architecture.png" alt="Architecture sheet"><figcaption><strong>Architecture.</strong> The put together: the biggest file at the top, the files under it next, with real function names read out of the source.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/macos-optimizer-Visuals/flowchart.png" alt="Flowchart sheet"><figcaption><strong>Flowchart.</strong> The run: start at the entry file, pass through the real steps the code takes, end where the code ends.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/macos-optimizer-Visuals/product-map.png" alt="Product map sheet"><figcaption><strong>Product map.</strong> What the project is for, what goes in, what comes out, and where it stops.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/macos-optimizer-Visuals/data-flow.png" alt="Data flow sheet"><figcaption><strong>Data flow.</strong> The data path in one direction, file to result.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/macos-optimizer-Visuals/schematic.png" alt="Schematic sheet"><figcaption><strong>Schematic.</strong> The sixth PNG in the folder. VISUAL.md lists five sheets and does not describe this one, so I caption it only as what it is: an extra sheet present in macos-optimizer-Visuals, shown here because the folder holds it.</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/Epsilon0xCell/macos-optimizer/main/macos-optimizer-Visuals/statistics.png" alt="Statistics sheet"><figcaption><strong>Statistics.</strong> The counts, drawn as bars you can check against the repo. Lines were counted file by file from the snapshot VISUAL.md describes.</figcaption></figure>
+<p class="sub">The sheets follow a paper rule from VISUAL.md: drawn on notebook paper with three binder holes down the left side, nothing drawn over a hole, and a machine check that counted 0 ink pixels in the hole zones for that set. The PDF in the same folder, macos-optimizer-Visuals.pdf, holds the five sheets VISUAL.md lists, in its order, for printing.</p>
+
+<h2>Honest limits, stated plainly</h2>
+<div class="note">
+<p>The intro in <code>script.sh</code> says no changes will be made without your explicit confirmation. That is not how the menu behaves. Choosing a menu item applies that change immediately. Only TRIM, option 6, asks for confirmation first. I left the intro wording as written and I record the mismatch here and in the README, rather than rebuilding confirmations for all 25 options.</p>
+<p>This script is macOS only. It calls <code>sw_vers</code>, <code>sysctl</code>, <code>pmset</code>, <code>mdutil</code>, and other macOS tools, so it does not run as written on Linux or Windows.</p>
+<p>I verified the script with <code>bash -n</code> only. I did not run it live, and this page stages no run. Running it would change a real Mac's settings, which is exactly why a syntax check is the honest check here.</p>
+<p>No switch on this page controls anything. If you want the real switches, run <code>script.sh</code> on a Mac you own, read each row before you pick it, and keep a backup first, as the script intro itself advises.</p>
+</div>
+
+<p style="margin-top:28px"><a href="https://github.com/Epsilon0xCell/macos-optimizer">This repo</a> &nbsp; <a href="https://github.com/samihalawa/macos-optimizer">Upstream project by Sami Halawa</a> &nbsp; <a href="https://github.com/Epsilon0xCell">My GitHub profile</a></p>
+<footer>Built by Epsilon0xCell. Panel note: upstream built the board, I rewired switch 23, corrected two find lines, fixed one label, and defined one colour. I claim that delta, and nothing more.</footer>
+</div>
+<script>
+document.documentElement.classList.add('js');
+document.querySelectorAll('.flip').forEach(function(el){el.addEventListener('change',function(){el.closest('.switch-row').classList.toggle('on',el.checked);});});
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
+  document.querySelectorAll('.reveal, .group, figure, .card').forEach(function(el){el.classList.add('reveal');io.observe(el);});
+}
+</script>
+</body>
+</html>
